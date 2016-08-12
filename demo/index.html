@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+  <script type="text/javascript" src="../../webcomponentsjs/webcomponents.js"></script>
+  <link rel="import" href="../pie-component-page.html" />
+  <script type="text/javascript" src="../../lodash/dist/lodash.js"></script>
+  <script>
+      document.addEventListener('DOMContentLoaded', function(){
+        var el = document.querySelector('#one');
+        if(el) {
+          var md = [
+            '# My Pie Component',
+            '',
+            'This is my component',
+            '> This is a *note*'
+          ].join('\n');
+
+          el.readme = md;
+          el.name = 'my-pie-component';
+        }
+      });
+        
+      </script>
+</head>
+
+<body>
+  <pie-component-page id="one"></pie-component-page>
+</body>
+
+</html>
