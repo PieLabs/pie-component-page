@@ -7,15 +7,16 @@
 <link rel="import" href="../paper-styles/color.html">
 <link rel="import" href="../paper-styles/typography.html">
 <link rel="import" href="../paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../github-icons/github-icons.html">
 
 <dom-module is="pie-component-page">
+
+  <template>
   <!-- 
-    a page for viewing pie documentation 
+    A page for viewing pie documentation. Contains the readme, a demo link and a schema viewer.
     
     @demo demo/index.html
   -->
-
-  <template>
     <style>
       :host {
         font-family: 'Roboto', 'Noto', sans-serif;
@@ -28,12 +29,13 @@
       
       paper-header-panel {
         @apply(--layout-flex);
-        background: var(--paper-grey-50);
+        background: var(--pie-page-header-bg, --paper-grey-50);
       }
 
       paper-toolbar {
-        --paper-toolbar-background: var(--paper-grey-50);
-        --paper-toolbar-color: var(--paper-grey-800);
+        --paper-toolbar-background: var(--pie-page-toolbar-bg, --paper-green-100);
+        --paper-toolbar-color: var(--pie-page-toolbar-color, --paper-green-400);
+        --paper-toolbar-height: 45px;
         flex-shrink: 0;
       }
 
@@ -59,9 +61,19 @@
         margin-right: 0;
       }
 
+      paper-toolbar iron-selector{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+      }
+
+      paper-toolbar iron-selector a{
+        flex: 1 1 auto;
+      }
+
       paper-toolbar a, paper-toolbar a iron-icon {
         font-weight: normal;
-        color: var(--paper-grey-500);
+        color: var(--paper-green-300);
       }
 
       paper-toolbar iron-icon {
@@ -69,11 +81,11 @@
       }
 
       paper-toolbar a.iron-selected, paper-toolbar a.iron-selected iron-icon {
-        color: var(--paper-grey-800);
+        color: var(--paper-green-600);
       }
 
       paper-toolbar a:hover, paper-toolbar a:hover iron-icon {
-        color: var(--paper-pink-500);
+        color: var(--paper-green-500);
       }
 
       #demo iframe {
@@ -103,6 +115,7 @@
         padding: 20px;
         margin: 0 auto;
       }
+      
       #active {
         font-size: 20px;
         font-family: Roboto, Noto;
@@ -150,9 +163,44 @@
         @apply(--layout-flex);
       }
 
+      .top{
+        padding: 10px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+      }
+      
+      .top .header{
+        font-size: 20px;
+      }
+
+      .top .right {
+        float: right;
+      }
+      .top a{
+        color: black;
+        cursor: pointer;
+        padding-right: 10px;
+      }
+
+      .top a:hover{
+        opacity: 0.7;
+      }
+
     </style>
+        <div class="top">
+          <span class="header">{{name}} - {{version}}</span>
+          <span class="right">
+            <a href="{{repositoryUrl}}" target="_blank">
+              <iron-icon icon="github:mark-github"></iron-icon>
+            </a>
+            <a href="pie.com" target="_blank">
+              <iron-icon alt="pie" icon="github:rocket"></iron-icon>
+            </a>
+          </span> 
+        </div>
      <paper-header-panel id="headerPanel" mode="[[scrollMode]]">
       <paper-toolbar catalog-hidden>
+
         <iron-selector 
           attr-for-selected="view" 
           selected="{{view}}" 
@@ -163,6 +211,7 @@
           <a view="demo"><iron-icon icon="visibility"></iron-icon> <span>Demo</span></a>
           <a view="schema"><iron-icon icon="icons:view-quilt"></iron-icon> <span>Schema</span></a>
         </iron-selector>
+
       </paper-toolbar>
       <div id="content">
         <iron-selector id="view" selected="[[_viewType(view)]]" attr-for-selected="id">
@@ -171,7 +220,7 @@
               <div class="markdown-html"></div>
             </marked-element>
           </div>
-          <div id="demo">demo</div>
+          <div id="demo"></div>
           <div id="schema">schema</div>
         </iron-selector>
       </div>
@@ -190,11 +239,49 @@
         type: String
       }
     },
+    observers: [
+      '_updateFrameSrc(view)'
+    ],
      _demoView: function(path) {
        return "demo:" + path;
     },
     _viewType: function(view) {
       return view ? view.split(":")[0] : null;
+    },
+    _updateFrameSrc: function(view) {
+      if (!view || view.indexOf("demo") !== 0) return "about:blank";
+      var demoSrc = new URL(this.demo).toString();
+      var self = this;
+      // If you use history.pushState with iframe.src = url, you will create 2 history entries,
+      // but creating a new iframe dynamically will prevent it.
+      if (this._iframe) {
+        Polymer.dom(this.$.demo).removeChild(this._iframe);
+      }
+      this._iframe = document.createElement('iframe');
+      this._iframe.src = demoSrc;
+      this._iframe.allowFullscreen = true;
+      // Fixes iron-component-page/issues/80
+      // Scrollbar issue in desktop/mobile Safari that prevents the user
+      // from scrolling the demos. In this case, we need to force layout
+      // in the main document when the iframe content has been fully rendered.
+      this._iframe.style.height = '0%';
+      this._iframe.addEventListener('load', function() {
+        var win = self._iframe.contentWindow;
+        if (win.HTMLImports) {
+          win.HTMLImports.whenReady(function() {
+            if (win.Polymer) {
+              win.Polymer.RenderStatus.afterNextRender(self, function() {
+                self._iframe.style.height = '100%';
+              });
+            } else {
+              self._iframe.style.height = '100%';
+            }
+          });
+        } else {
+          self._iframe.style.height = '100%';
+        }
+      });
+      Polymer.dom(this.$.demo).appendChild(this._iframe);
     }
   })
 </script>
