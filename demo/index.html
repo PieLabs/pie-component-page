@@ -20,6 +20,55 @@
           el.version = '1.0.0';
           el.repositoryUrl = 'http://github.com/PieLabs/pie-component-page';
           el.demo = 'http://localhost:8080/components/pie-component-page/';
+           el.schemas = [
+           {
+          id: "model",
+          $schema: "http://json-schema.org/draft-04/schema#",
+          title: "model",
+          description: "The configuration model for this pie.",
+          type: "object",
+          required : ['id', 'component'],
+          properties: {
+            component: {
+              type: 'object',
+              description: 'The component identifier',
+              required: ['name', 'version'],
+              properties: {
+                name: {
+                  type: 'string'
+                },
+                version: {
+                  description: 'A semver string - the only variable operator is the ~',
+                  example: '~0.0.1',
+                  type: 'string'
+                }
+              }
+            },
+            id: {
+              type: "string",
+              description: "the uid of the item",
+              example: "1"
+            },
+            prompt: {
+              type: "string",
+              description: "This is shown to the user",
+              example: 'What is the 1st letter of the alphabet?'
+            }
+          }
+        },
+        {
+          id: 'session',
+          title: 'Session'
+        },
+        {
+          id: 'outcome',
+          title: 'Outcome'
+        },
+        {
+          id: '_uiModel',
+          title: 'UI Model'
+        }
+        ];
         }
       });
         

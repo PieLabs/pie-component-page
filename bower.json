@@ -9,6 +9,7 @@
     "pie"
   ],
   "dependencies": {
+    "json-schema-elements" : "git@github.com:PieLabs/json-schema-elements.git",
     "polymer": "Polymer#^1.6.1",
     "paper-styles": "PolymerElements/paper-styles#^1.1.4",
     "lodash": "^4.14.2",

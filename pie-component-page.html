@@ -8,6 +8,7 @@
 <link rel="import" href="../paper-styles/typography.html">
 <link rel="import" href="../paper-toolbar/paper-toolbar.html">
 <link rel="import" href="../github-icons/github-icons.html">
+<link rel="import" href="../json-schema-elements/json-schema-elements.html">
 
 <dom-module is="pie-component-page">
 
@@ -108,6 +109,15 @@
       #view > .iron-selected {
         display: block;
       }
+      
+      #schema-view > * {
+        display: none;
+      }
+
+      #schema-view > .iron-selected {
+        display: block;
+      }
+
 
       #docs {
         max-width: var(--iron-component-page-max-width, 48em);
@@ -209,7 +219,7 @@
           hidden$="[[!docDemos.length]]">
           <a view="docs"><iron-icon icon="description"></iron-icon> README.md</a>
           <a view="demo"><iron-icon icon="visibility"></iron-icon> <span>Demo</span></a>
-          <a view="schema"><iron-icon icon="icons:view-quilt"></iron-icon> <span>Schema</span></a>
+          <a view="schema"><iron-icon icon="icons:view-quilt"></iron-icon> <span>Schema(s)</span></a>
         </iron-selector>
 
       </paper-toolbar>
@@ -221,7 +231,30 @@
             </marked-element>
           </div>
           <div id="demo"></div>
-          <div id="schema">schema</div>
+          <div id="schema">
+            <paper-toolbar catalog-hidden>
+              <iron-selector 
+                attr-for-selected="view" 
+                selected="{{schemaView}}" 
+                id="schema-links" 
+                fallback-selection="{{_getSchemaFallback(schemas)}}"
+                hidden$="[[!schemas.length]]">
+                <template is="dom-repeat" items="{{schemas}}">
+                  <a view$="[[item.id]]">{{item.title}}</a>
+                </template>
+              </iron-selector>
+            </paper-toolbar>
+
+            <iron-selector id="schema-view" selected="{{schemaView}}" attr-for-selected="id">
+                <template is="dom-repeat" items="{{schemas}}">
+                  <div id$="{{item.id}}">
+                    <h1>{{item.title}}</h1>
+                    <h4>{{item.description}}</h4>
+                    <json-schema schema="{{item}}"></json-schema>
+                  </div>
+                </template>
+            </iron-selector>
+          </div>
         </iron-selector>
       </div>
     </paper-header-panel>
@@ -237,6 +270,9 @@
     properties: {
       readme: {
         type: String
+      },
+      schemas: {
+        type:Array 
       }
     },
     observers: [
@@ -247,6 +283,16 @@
     },
     _viewType: function(view) {
       return view ? view.split(":")[0] : null;
+    },
+    _schemaView: function(schemaView){
+      return schemaView;
+    },
+    _getSchemaFallback: function(schemas){
+      if(schemas && schemas.length > 0){
+        return schemas[0].id;
+      } else {
+        return '';
+      }
     },
     _updateFrameSrc: function(view) {
       if (!view || view.indexOf("demo") !== 0) return "about:blank";
