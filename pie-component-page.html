@@ -40,27 +40,23 @@
         flex-shrink: 0;
       }
 
-      p {
-        max-width: 20em;
-      }
-
       :host(.loaded) > paper-header-panel {
         opacity: 1.0;
       }
 
-      #content {
+      /*#content {
         display: block;
         background: var(--paper-grey-50);
-      }
+      }*/
 
-      paper-toolbar a {
+      /*paper-toolbar a {
         margin: 0 10px;
         cursor: pointer;
       }
 
       paper-toolbar a:last-child {
         margin-right: 0;
-      }
+      }*/
 
       paper-toolbar iron-selector{
         width: 100%;
@@ -118,59 +114,16 @@
         display: block;
       }
 
-
       #docs {
-        max-width: var(--iron-component-page-max-width, 48em);
-        @apply(--iron-component-page-container);
-        padding: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
         margin: 0 auto;
-      }
-      
-      #active {
-        font-size: 20px;
-        font-family: Roboto, Noto;
-        border: 0;
-        background: transparent;
       }
 
       paper-toolbar a {
         font-size: 14px;
         text-transform: uppercase;
         cursor: pointer;
-      }
-
-      #cart-icon {
-        margin-left: 10px;
-        cursor: pointer;
-      }
-
-      #catalog-heading {
-        margin: 4px 0 18px;
-      }
-
-      #catalog-heading h2 {
-        color: var(--paper-grey-800);
-        @apply(--paper-font-title);
-        margin: 0;
-      }
-
-      #catalog-heading .version {
-        color: var(--paper-grey-500);
-        font-size: 18px;
-        line-height: 24px;
-        font-weight: 400;
-      }
-
-      #catalog-heading .version:before {
-        content: "(";
-      }
-
-      #catalog-heading .version:after {
-        content: ")";
-      }
-      
-      .docs-header {
-        @apply(--layout-flex);
       }
 
       .top{
@@ -268,19 +221,28 @@
   Polymer({
     is: 'pie-component-page',
     properties: {
+      /**
+       * a markdown string
+       */
       readme: {
         type: String
       },
+      /**
+       * An array of [json-schemas](http://json-schema.org) to display
+       */
       schemas: {
         type:Array 
+      },
+      /**
+       * The url of the demo page - will be loaded into an iframe.
+       */
+      demo: {
+        type: String
       }
     },
     observers: [
       '_updateFrameSrc(view)'
     ],
-     _demoView: function(path) {
-       return "demo:" + path;
-    },
     _viewType: function(view) {
       return view ? view.split(":")[0] : null;
     },
@@ -294,6 +256,9 @@
         return '';
       }
     },
+    /**
+     * Lifted from iron-component-page
+     */
     _updateFrameSrc: function(view) {
       if (!view || view.indexOf("demo") !== 0) return "about:blank";
       var demoSrc = new URL(this.demo).toString();
