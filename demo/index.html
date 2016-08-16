@@ -29,6 +29,11 @@
           type: "object",
           required : ['id', 'component'],
           properties: {
+            id: {
+              type: "string",
+              description: "the uid of the item",
+              example: "1"
+            },
             component: {
               type: 'object',
               description: 'The component identifier',
@@ -44,11 +49,6 @@
                 }
               }
             },
-            id: {
-              type: "string",
-              description: "the uid of the item",
-              example: "1"
-            },
             prompt: {
               type: "string",
               description: "This is shown to the user",
@@ -57,7 +57,7 @@
           }
         },
         {
-          id: 'session',
+          id: '_session',
           title: 'Session'
         },
         {
