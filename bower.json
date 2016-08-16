@@ -9,7 +9,7 @@
     "pie"
   ],
   "dependencies": {
-    "json-schema-elements" : "git@github.com:PieLabs/json-schema-elements.git",
+    "json-schema-elements": "git@github.com:PieLabs/json-schema-elements.git",
     "polymer": "Polymer#^1.6.1",
     "paper-styles": "PolymerElements/paper-styles#^1.1.4",
     "lodash": "^4.14.2",
@@ -18,7 +18,8 @@
     "iron-selector": "PolymerElements/iron-selector#^1.5.2",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.3.1",
     "iron-icons": "PolymerElements/iron-icons#^1.1.3",
-    "github-icons": "^1.1.4"
+    "github-icons": "^1.1.4",
+    "paper-toolbar": "PolymerElements/paper-toolbar#^1.1.6"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
