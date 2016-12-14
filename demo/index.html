@@ -1,82 +1,84 @@
 <!doctype html>
 <html>
+
 <head>
   <script type="text/javascript" src="../../webcomponentsjs/webcomponents.js"></script>
   <link rel="import" href="../pie-component-page.html" />
   <script type="text/javascript" src="../../lodash/dist/lodash.js"></script>
   <script>
-      document.addEventListener('DOMContentLoaded', function(){
-        var el = document.querySelector('#one');
-        if(el) {
-          var md = [
-            '# My Pie Component',
-            '',
-            'This is my component',
-            '> This is a *note*'
-          ].join('\n');
+    document.addEventListener('DOMContentLoaded', function () {
+      var el = document.querySelector('#one');
+      if (el) {
+        var md = [
+          '# My Pie Component',
+          '',
+          'This is my component',
+          '> This is a *note*'
+        ].join('\n');
 
-          el.readme = md;
-          el.name = 'my-pie-component';
-          el.version = '1.0.0';
-          el.repositoryUrl = 'http://github.com/PieLabs/pie-component-page';
-          el.demo = 'http://localhost:8080/components/pie-component-page/';
-           el.schemas = [
-           {
-          id: "model",
-          $schema: "http://json-schema.org/draft-04/schema#",
-          title: "model",
-          description: "The configuration model for this pie.",
-          type: "object",
-          required : ['id', 'component'],
-          properties: {
-            id: {
-              type: "string",
-              description: "the uid of the item",
-              example: "1"
-            },
-            component: {
-              type: 'object',
-              description: 'The component identifier',
-              required: ['name', 'version'],
-              properties: {
-                name: {
-                  type: 'string'
-                },
-                version: {
-                  description: 'A semver string - the only variable operator is the ~',
-                  example: '~0.0.1',
-                  type: 'string'
+        el.readme = md;
+        el.name = 'my-pie-component';
+        el.version = '1.0.0';
+        el.repositoryUrl = 'http://github.com/PieLabs/pie-component-page';
+        el.schemas = [
+          {
+            id: "model",
+            $schema: "http://json-schema.org/draft-04/schema#",
+            title: "model",
+            description: "The configuration model for this pie.",
+            type: "object",
+            required: ['id', 'component'],
+            properties: {
+              id: {
+                type: "string",
+                description: "the uid of the item",
+                example: "1"
+              },
+              component: {
+                type: 'object',
+                description: 'The component identifier',
+                required: ['name', 'version'],
+                properties: {
+                  name: {
+                    type: 'string'
+                  },
+                  version: {
+                    description: 'A semver string - the only variable operator is the ~',
+                    example: '~0.0.1',
+                    type: 'string'
+                  }
                 }
+              },
+              prompt: {
+                type: "string",
+                description: "This is shown to the user",
+                example: 'What is the 1st letter of the alphabet?'
               }
-            },
-            prompt: {
-              type: "string",
-              description: "This is shown to the user",
-              example: 'What is the 1st letter of the alphabet?'
             }
+          },
+          {
+            id: '_session',
+            title: 'Session'
+          },
+          {
+            id: 'outcome',
+            title: 'Outcome'
+          },
+          {
+            id: '_uiModel',
+            title: 'UI Model'
           }
-        },
-        {
-          id: '_session',
-          title: 'Session'
-        },
-        {
-          id: 'outcome',
-          title: 'Outcome'
-        },
-        {
-          id: '_uiModel',
-          title: 'UI Model'
-        }
         ];
-        }
-      });
-        
-      </script>
+      }
+    });
+
+  </script>
 </head>
 
 <body>
-  <pie-component-page id="one"></pie-component-page>
+  <pie-component-page id="one">
+    <h1>I'm the demo</h1>
+  </pie-component-page>
 </body>
 
 </html>

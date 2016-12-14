@@ -71,7 +71,7 @@
         color: var(--paper-blue-500);
       }
 
-      #demo iframe {
+      #demo {
         @apply(--layout-fit);
       }
 
@@ -180,7 +180,9 @@
               <div class="markdown-html"></div>
             </marked-element>
           </div>
-          <div id="demo"></div>
+          <div id="demo">
+            <content></content>
+          </div>
           <div id="schema">
             <paper-toolbar catalog-hidden>
               <iron-selector 
@@ -224,17 +226,8 @@
        */
       schemas: {
         type:Array 
-      },
-      /**
-       * The url of the demo page - will be loaded into an iframe.
-       */
-      demo: {
-        type: String
       }
     },
-    observers: [
-      '_updateFrameSrc(view)'
-    ],
     _viewType: function(view) {
       return view ? view.split(":")[0] : null;
     },
@@ -247,43 +240,6 @@
       } else {
         return '';
       }
-    },
-    /**
-     * Lifted from iron-component-page
-     */
-    _updateFrameSrc: function(view) {
-      if (!view || view.indexOf("demo") !== 0) return "about:blank";
-      var self = this;
-      // If you use history.pushState with iframe.src = url, you will create 2 history entries,
-      // but creating a new iframe dynamically will prevent it.
-      if (this._iframe) {
-        Polymer.dom(this.$.demo).removeChild(this._iframe);
-      }
-      this._iframe = document.createElement('iframe');
-      this._iframe.src = this.demo;
-      this._iframe.allowFullscreen = true;
-      // Fixes iron-component-page/issues/80
-      // Scrollbar issue in desktop/mobile Safari that prevents the user
-      // from scrolling the demos. In this case, we need to force layout
-      // in the main document when the iframe content has been fully rendered.
-      this._iframe.style.height = '0%';
-      this._iframe.addEventListener('load', function() {
-        var win = self._iframe.contentWindow;
-        if (win.HTMLImports) {
-          win.HTMLImports.whenReady(function() {
-            if (win.Polymer) {
-              win.Polymer.RenderStatus.afterNextRender(self, function() {
-                self._iframe.style.height = '100%';
-              });
-            } else {
-              self._iframe.style.height = '100%';
-            }
-          });
-        } else {
-          self._iframe.style.height = '100%';
-        }
-      });
-      Polymer.dom(this.$.demo).appendChild(this._iframe);
     }
   })
 </script>
