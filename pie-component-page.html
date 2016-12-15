@@ -1,5 +1,5 @@
-<link rel="import" href="../polymer/polymer.html"/>
-<link rel="import" href="../marked-element/marked-element.html"/> 
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../marked-element/marked-element.html" />
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../iron-selector/iron-selector.html">
@@ -13,7 +13,7 @@
 <dom-module is="pie-component-page">
 
   <template>
-  <!-- 
+    <!-- 
     A page for viewing pie documentation. Contains the readme, a demo link and a schema viewer.
     
     @demo demo/index.html
@@ -71,7 +71,7 @@
         color: var(--paper-blue-500);
       }
 
-      #demo {
+      #pie-component-page-demo {
         @apply(--layout-fit);
       }
 
@@ -147,68 +147,62 @@
       }
 
     </style>
-        <div class="top">
-          <span class="header">{{name}} - {{version}}</span>
-          <span class="right">
+<div class="top">
+  <span class="header">{{name}} - {{version}}</span>
+  <span class="right">
             <a href="{{repositoryUrl}}" target="_blank">
               <iron-icon icon="github:mark-github"></iron-icon>
             </a>
             <a href="{{pie.url}}" target="_blank">
               <img class="pie-logo" src="{{pie.logo}}" alt="pie"></img>
             </a>
-          </span> 
-        </div>
-     <paper-header-panel id="headerPanel" mode="[[scrollMode]]">
-      <paper-toolbar catalog-hidden>
+          </span>
+</div>
+<paper-header-panel id="headerPanel" mode="[[scrollMode]]">
+  <paper-toolbar catalog-hidden>
 
-        <iron-selector 
-          attr-for-selected="view" 
-          selected="{{view}}" 
-          fallback-selection="docs"
-          id="links" 
-          hidden$="[[!docDemos.length]]">
-          <a view="docs"><iron-icon icon="description"></iron-icon> README.md</a>
-          <a view="demo"><iron-icon icon="visibility"></iron-icon> <span>Demo</span></a>
-          <a view="schema"><iron-icon icon="icons:view-quilt"></iron-icon> <span>Schema(s)</span></a>
-        </iron-selector>
+    <iron-selector attr-for-selected="view" selected="{{view}}" fallback-selection="docs" id="links" hidden$="[[!docDemos.length]]">
+      <a view="docs">
+        <iron-icon icon="description"></iron-icon> README.md</a>
+      <a view="demo">
+        <iron-icon icon="visibility"></iron-icon> <span>Demo</span></a>
+      <a view="schema">
+        <iron-icon icon="icons:view-quilt"></iron-icon> <span>Schema(s)</span></a>
+    </iron-selector>
 
-      </paper-toolbar>
-      <div id="content">
-        <iron-selector id="view" selected="[[_viewType(view)]]" attr-for-selected="id">
-          <div id="docs">
-            <marked-element markdown="{{readme}}">
-              <div class="markdown-html"></div>
-            </marked-element>
-          </div>
-          <div id="demo">
-            <content></content>
-          </div>
-          <div id="schema">
-            <paper-toolbar catalog-hidden>
-              <iron-selector 
-                attr-for-selected="view" 
-                selected="{{schemaView}}" 
-                id="schema-links" 
-                fallback-selection="{{_getSchemaFallback(schemas)}}"
-                hidden$="[[!schemas.length]]">
-                <template is="dom-repeat" items="{{schemas}}">
-                  <a view$="[[item.id]]">{{item.title}}</a>
-                </template>
-              </iron-selector>
-            </paper-toolbar>
+  </paper-toolbar>
+  <div id="content">
+    <iron-selector id="view" selected="[[_viewType(view)]]" attr-for-selected="id">
+      <div id="docs">
+        <marked-element markdown="{{readme}}">
+          <div class="markdown-html"></div>
+        </marked-element>
+      </div>
+      <div id="pie-component-page-demo">
+        <content></content>
+      </div>
+      <div id="schema">
+        <paper-toolbar catalog-hidden>
+          <iron-selector attr-for-selected="view" selected="{{schemaView}}" id="schema-links" fallback-selection="{{_getSchemaFallback(schemas)}}"
+            hidden$="[[!schemas.length]]">
+            <template is="dom-repeat" items="{{schemas}}">
+              <a view$="[[item.id]]">{{item.title}}</a>
+            </template>
+          </iron-selector>
+        </paper-toolbar>
 
-            <iron-selector id="schema-view" selected="{{schemaView}}" attr-for-selected="id">
-                <template is="dom-repeat" items="{{schemas}}">
-                  <div id$="{{item.id}}" class="schema-holder">
-                    <json-schema-root schema="{{item}}"></json-schema-root>
-                  </div>
-                </template>
-            </iron-selector>
-          </div>
+        <iron-selector id="schema-view" selected="{{schemaView}}" attr-for-selected="id">
+          <template is="dom-repeat" items="{{schemas}}">
+            <div id$="{{item.id}}" class="schema-holder">
+              <json-schema-root schema="{{item}}"></json-schema-root>
+            </div>
+          </template>
         </iron-selector>
       </div>
-    </paper-header-panel>
-  </template>
+    </iron-selector>
+  </div>
+</paper-header-panel>
+</template>
 </dom-module>
 
 <script>
@@ -225,17 +219,17 @@
        * An array of [json-schemas](http://json-schema.org) to display
        */
       schemas: {
-        type:Array 
+        type: Array
       }
     },
-    _viewType: function(view) {
+    _viewType: function (view) {
       return view ? view.split(":")[0] : null;
     },
-    _schemaView: function(schemaView){
+    _schemaView: function (schemaView) {
       return schemaView;
     },
-    _getSchemaFallback: function(schemas){
-      if(schemas && schemas.length > 0){
+    _getSchemaFallback: function (schemas) {
+      if (schemas && schemas.length > 0) {
         return schemas[0].id;
       } else {
         return '';
